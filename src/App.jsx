@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import LoginPage from './modules/LoginPage';
@@ -12,6 +13,7 @@ import ModuleManagement from './modules/ModuleManagement';
 import SystemLogs from './modules/SystemLogs';
 import ProfileSettings from './modules/ProfileSettings';
 import UserManual from './modules/UserManual';
+import ExecutiveDashboard from './modules/ExecutiveDashboard';
 import './index.css';
 
 function App() {
@@ -19,11 +21,10 @@ function App() {
   const [activeModule, setActiveModule] = useState('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  // Global Module State (Feature Flags)
   const [modules, setModules] = useState([
     { id: 'projects', name: 'Project Management', enabled: true, category: 'Core' },
-    { id: 'users', name: 'User & Org Control', enabled: true, category: 'Core' },
-    { id: 'roles', name: 'Permission Builder', enabled: true, category: 'Security' },
+    { id: 'users', name: 'User Control', enabled: true, category: 'Core' },
+    { id: 'roles', name: 'Roles & Access', enabled: true, category: 'Core' },
     { id: 'workflows', name: 'Workflow Engine', enabled: true, category: 'Automation' },
     { id: 'dashboard', name: 'Dashboard Builder', enabled: true, category: 'Visualization' },
     { id: 'logs', name: 'Audit Logs', enabled: true, category: 'System' },
@@ -76,7 +77,8 @@ function App() {
     return <LoginPage onLogin={handleLogin} />;
   }
 
-  return (
+  // Admin Dashboard Layout
+  const AdminLayout = () => (
     <div className="app-container" style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <Sidebar 
         activeModule={activeModule} 
@@ -107,6 +109,20 @@ function App() {
         </main>
       </div>
     </div>
+  );
+
+  return (
+    <Routes>
+      {/* Standalone Executive View */}
+      <Route path="/executive" element={
+        <div style={{ height: '100vh', background: '#020617', overflowY: 'auto', overflowX: 'hidden' }}>
+          <ExecutiveDashboard onLogout={handleLogout} />
+        </div>
+      } />
+      
+      {/* Admin Dashboard */}
+      <Route path="/*" element={<AdminLayout />} />
+    </Routes>
   );
 }
 

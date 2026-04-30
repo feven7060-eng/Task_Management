@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Zap,
   User,
-  BookOpen
+  BookOpen,
+  ExternalLink
 } from 'lucide-react';
 
 const Sidebar = ({ activeModule, setActiveModule, collapsed, setCollapsed, modules = [] }) => {
@@ -48,104 +49,76 @@ const Sidebar = ({ activeModule, setActiveModule, collapsed, setCollapsed, modul
       borderRight: '1px solid var(--surface-border)',
       background: 'rgba(5, 5, 5, 0.8)'
     }}>
-      {/* Logo Section */}
-      <div style={{
-        padding: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        borderBottom: '1px solid var(--surface-border)',
-        height: 'var(--header-height)',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          minWidth: '40px',
-          height: '40px',
-          borderRadius: '10px',
-          background: 'linear-gradient(135deg, var(--accent-primary), #a855f7)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 0 15px rgba(99, 102, 241, 0.4)'
-        }}>
-          <Zap size={20} color="white" fill="white" />
-        </div>
+      <div style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between' }}>
         {!collapsed && (
-          <span style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '0.5px' }}>
-            ANTIGRAVITY <span style={{ color: 'var(--accent-primary)', fontSize: '12px', verticalAlign: 'super' }}>PRO</span>
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--accent-primary), #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Zap size={20} color="white" />
+            </div>
+            <span style={{ fontWeight: 800, fontSize: '18px', letterSpacing: '-0.5px' }}>CORTEX</span>
+          </div>
         )}
+        <button 
+          onClick={() => setCollapsed(!collapsed)}
+          style={{ background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: 'white' }}
+        >
+          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        </button>
       </div>
 
-      {/* Menu Items */}
-      <nav style={{ flex: 1, padding: '16px 12px' }}>
-        {filteredItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeModule === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveModule(item.id)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '12px',
-                marginBottom: '8px',
-                borderRadius: '12px',
-                border: 'none',
-                background: isActive ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
-                color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                textAlign: 'left',
-                position: 'relative'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                if (!isActive) e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'transparent';
-                if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
-            >
-              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-              {!collapsed && <span style={{ fontWeight: isActive ? 600 : 400 }}>{item.label}</span>}
-              {isActive && (
-                <div style={{
-                  position: 'absolute',
-                  left: '-12px',
-                  width: '4px',
-                  height: '24px',
-                  background: 'var(--accent-primary)',
-                  borderRadius: '0 4px 4px 0',
-                  boxShadow: '0 0 10px var(--accent-primary)'
-                }} />
-              )}
-            </button>
-          );
-        })}
+      <nav style={{ flex: 1, padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {filteredItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveModule(item.id)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              border: 'none',
+              background: activeModule === item.id ? 'linear-gradient(90deg, rgba(99, 102, 241, 0.15), transparent)' : 'transparent',
+              color: activeModule === item.id ? 'var(--accent-primary)' : 'rgba(255,255,255,0.5)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              textAlign: 'left',
+              width: '100%',
+              position: 'relative'
+            }}
+          >
+            <item.icon size={20} style={{ minWidth: '20px' }} />
+            {!collapsed && <span style={{ fontSize: '14px', fontWeight: 500 }}>{item.label}</span>}
+            {activeModule === item.id && !collapsed && (
+              <div style={{ position: 'absolute', right: '12px', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 10px var(--accent-primary)' }} />
+            )}
+          </button>
+        ))}
       </nav>
 
-      {/* Collapse Toggle */}
-      <button 
-        onClick={() => setCollapsed(!collapsed)}
-        style={{
-          padding: '20px',
-          border: 'none',
-          background: 'transparent',
-          color: 'var(--text-secondary)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: collapsed ? 'center' : 'flex-end',
-          borderTop: '1px solid var(--surface-border)'
-        }}
-      >
-        {collapsed ? <ChevronRight size={20} /> : <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ChevronLeft size={20} /> <span>Collapse</span></div>}
-      </button>
+      {/* External Link to Executive View */}
+      <div style={{ padding: '12px', borderTop: '1px solid var(--surface-border)' }}>
+        <button
+          onClick={() => window.open('/executive', '_blank')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: collapsed ? 'center' : 'flex-start',
+            gap: '12px',
+            padding: '12px 16px',
+            borderRadius: '12px',
+            border: '1px solid rgba(16, 185, 129, 0.2)',
+            background: 'rgba(16, 185, 129, 0.05)',
+            color: '#10b981',
+            cursor: 'pointer',
+            width: '100%',
+            transition: 'all 0.2s'
+          }}
+        >
+          <ExternalLink size={20} style={{ minWidth: '20px' }} />
+          {!collapsed && <span style={{ fontSize: '14px', fontWeight: 600 }}>Live Portfolio</span>}
+        </button>
+      </div>
     </aside>
   );
 };
