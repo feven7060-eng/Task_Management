@@ -1,0 +1,76 @@
+.role-footer-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.roles-list {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  overflow-x: auto;
+  gap: 1rem;
+}
+
+.role-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.5rem;
+  min-width: 160px;
+}
+
+.role-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.role-level {
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+.footer-copyright {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Hide scrollbar for roles list */
+.roles-list::-webkit-scrollbar {
+  display: none;
+}
+.roles-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 1024px) {
+  .roles-list {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
